@@ -16,16 +16,19 @@ app.post('/webhook', (req, res) => {
   
     // Checks this is an event from a page subscription
     if (body.object === 'page') {
-  
-      // Iterates over each entry - there may be multiple if batched
+
+
       body.entry.forEach(function(entry) {
-  
-        // Gets the message. entry.messaging is an array, but 
-        // will only ever contain one message, so we get index 0
+
+        // Gets the body of the webhook event
         let webhook_event = entry.messaging[0];
         console.log(webhook_event);
-      });
-  
+      
+        // Get the sender PSID
+        let sender_psid = webhook_event.sender.id;
+        console.log('Sender PSID: ' + sender_psid);
+      
+      });  
       // Returns a '200 OK' response to all requests
       res.status(200).send('EVENT_RECEIVED');
     } else {
@@ -45,7 +48,7 @@ app.get('/webhook', (req, res) => {
     // Your verify token. Should be a random string.
     const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
     const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-    
+
     // Parse the query params
     let mode = req.query['hub.mode'];
     let token = req.query['hub.verify_token'];
@@ -69,4 +72,16 @@ app.get('/webhook', (req, res) => {
     else{
       res.sendStatus(403);    
     }
+  });
+
+  body.entry.forEach(function(entry) {
+
+    // Gets the body of the webhook event
+    let webhook_event = entry.messaging[0];
+    console.log(webhook_event);
+  
+    // Get the sender PSID
+    let sender_psid = webhook_event.sender.id;
+    console.log('Sender PSID: ' + sender_psid);
+  
   });
