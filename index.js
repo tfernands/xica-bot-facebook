@@ -31,6 +31,15 @@ app.post('/webhook', (req, res) => {
       });  
       // Returns a '200 OK' response to all requests
       res.status(200).send('EVENT_RECEIVED');
+
+      // Check if the event is a message or postback and
+      // pass the event to the appropriate handler function
+      if (webhook_event.message) {
+        handleMessage(sender_psid, webhook_event.message);        
+      } else if (webhook_event.postback) {
+        handlePostback(sender_psid, webhook_event.postback);
+      }
+
     } else {
       // Returns a '404 Not Found' if event is not from a page subscription
       res.sendStatus(404);
@@ -73,3 +82,18 @@ app.get('/webhook', (req, res) => {
       res.sendStatus(403);    
     }
   });
+
+// Handles messages events
+function handleMessage(sender_psid, received_message) {
+
+}
+
+// Handles messaging_postbacks events
+function handlePostback(sender_psid, received_postback) {
+
+}
+
+// Sends response messages via the Send API
+function callSendAPI(sender_psid, response) {
+  
+}
